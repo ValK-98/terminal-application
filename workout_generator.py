@@ -2,6 +2,18 @@ import workout_database
 import random
 
 
+def get_valid_workout_days():
+    while True:
+        try:
+            workout_days = int(input("Enter the number of workout days (1-5): "))
+            if 1 <= workout_days <= 5:
+                return workout_days
+            else:
+                print("Please enter a number between 1 and 5.")
+        except ValueError:
+            print("Please enter a valid integer between 1 and 5.")
+
+
 def WorkoutGenerator(workout_days):
     for session in range(workout_days):
         # Shuffle the workouts list to randomize exercise selection for each session

@@ -1,4 +1,7 @@
 import workout_generator
 
 
-workout_generator.WorkoutGenerator(int(input("Enter number of days you'd like to workout?: ")))
+
+workout_days = workout_generator.get_valid_workout_days()
+
+workout_generator.WorkoutGenerator(workout_days)
