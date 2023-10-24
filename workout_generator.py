@@ -1,7 +1,8 @@
+# Import necessary modules
 import workout_database
 import random
 
-
+# Function to get a valid number of workout days from the user
 def get_valid_workout_days():
     while True:
         try:
@@ -13,32 +14,57 @@ def get_valid_workout_days():
         except ValueError:
             print("Please enter a valid integer between 1 and 5.")
 
+# Function to get a random exercise from a given list
+def get_random_exercise(exercise_list):
+    random.shuffle(exercise_list)
+    return exercise_list.pop()
 
-def WorkoutGenerator(workout_days):
-    for session in range(workout_days):
-        # Shuffle the workouts list to randomize exercise selection for each session
-        random.shuffle(workout_database.workouts)
+# Function to generate a workout plan for the specified number of days
+def generate_workout(workout_days):
+    # Get the unique body parts from the exercise database
+    body_parts = set(exercise["body_part"] for exercise in workout_database.workouts)
+    
+    # Separate exercises into compound and accessory categories
+    compound_exercises = [exercise for exercise in workout_database.workouts if exercise["type"] == "compound"]
+    accessory_exercises = [exercise for exercise in workout_database.workouts if exercise["type"] == "accessory"]
+    
+    # Initialize a set to keep track of used compound exercises and a dictionary to count body parts
+    used_compound_exercises = set()
+    body_part_counts = {part: 0 for part in body_parts}
+    
+    # Calculate the number of compound exercises to assign per body part
+    even_body_part_count = len(compound_exercises) // len(body_parts)
 
+    # Loop through each workout day
+    for day in range(1, workout_days + 1):
         workout_plan = []
-        body_parts_in_session = set()
 
+        # Generate a workout plan with 4 exercises for the current day
         while len(workout_plan) < 4:
-            for workout in workout_database.workouts:
-                body_part = workout["body_part"]
-                if body_part not in body_parts_in_session:
-                    workout_plan.append(workout)
-                    body_parts_in_session.add(body_part)
+            if compound_exercises:
+                # Get a random compound exercise
+                compound_exercise = get_random_exercise(compound_exercises)
+                
+                # Check if the exercise hasn't been used and body part count is within the limit
+                if (
+                    compound_exercise["name"] not in used_compound_exercises
+                    and body_part_counts[compound_exercise["body_part"]] < even_body_part_count
+                ):
+                    workout_plan.append(compound_exercise)
+                    used_compound_exercises.add(compound_exercise["name"])
+                    body_part_counts[compound_exercise["body_part"]] += 1
+                else:
+                    # If not, add an accessory exercise
+                    accessory_exercise = get_random_exercise(accessory_exercises)
+                    workout_plan.append(accessory_exercise)
+            else:
+                # If there are no more compound exercises, add an accessory exercise
+                accessory_exercise = get_random_exercise(accessory_exercises)
+                workout_plan.append(accessory_exercise)
 
-                if len(workout_plan) == 4:
-                    break  # Exit the inner loop if we have 4 exercises
-
-        print(f"Session {session + 1}:")
+        # Print the workout plan for the current day
+        print(f"Day {day}:")
         for exercise in workout_plan:
             print(f"  {exercise['name']} ({exercise['body_part']})")
         print()
 
-        # Decrease the remaining workout days
-        workout_days -= 1
-
-        if workout_days == 0:
-            break
