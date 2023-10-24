@@ -39,32 +39,33 @@ def generate_workout(workout_days):
     for day in range(1, workout_days + 1):
         workout_plan = []
 
-        # Generate a workout plan with 4 exercises for the current day
-        while len(workout_plan) < 4:
-            if compound_exercises:
-                # Get a random compound exercise
-                compound_exercise = get_random_exercise(compound_exercises)
-                
-                # Check if the exercise hasn't been used and body part count is within the limit
-                if (
-                    compound_exercise["name"] not in used_compound_exercises
-                    and body_part_counts[compound_exercise["body_part"]] < even_body_part_count
-                ):
-                    workout_plan.append(compound_exercise)
-                    used_compound_exercises.add(compound_exercise["name"])
-                    body_part_counts[compound_exercise["body_part"]] += 1
+        # Generate a workout plan with 4 exercises for the current day if more than 1 day is chosen
+        if workout_days > 1:
+            while len(workout_plan) < 4:
+                if compound_exercises:
+                    # Get a random compound exercise
+                    compound_exercise = get_random_exercise(compound_exercises)
+                    # Check if the exercise hasn't been used and body part count is within the limit
+                    if (
+                        compound_exercise["name"] not in used_compound_exercises
+                        and body_part_counts[compound_exercise["body_part"]] < even_body_part_count
+                    ):
+                        workout_plan.append(compound_exercise)
+                        used_compound_exercises.add(compound_exercise["name"])
+                        body_part_counts[compound_exercise["body_part"]] += 1
                 else:
                     # If not, add an accessory exercise
                     accessory_exercise = get_random_exercise(accessory_exercises)
                     workout_plan.append(accessory_exercise)
-            else:
-                # If there are no more compound exercises, add an accessory exercise
-                accessory_exercise = get_random_exercise(accessory_exercises)
-                workout_plan.append(accessory_exercise)
+        else:
+            # If only 1 day is chosen, include only compound exercises
+            while len(workout_plan) < 4:
+                if compound_exercises:
+                    compound_exercise = get_random_exercise(compound_exercises)
+                    workout_plan.append(compound_exercise)
 
         # Print the workout plan for the current day
         print(f"Day {day}:")
         for exercise in workout_plan:
             print(f"  {exercise['name']} ({exercise['body_part']})")
         print()
-
