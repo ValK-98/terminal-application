@@ -8,7 +8,7 @@ def get_random_exercise(exercise_list):
     return exercise_list.pop()
 
 # Function to generate a workout plan for the specified number of days
-def generate_workout(workout_days):
+def generate_workout(workout_days, goal_type):
     # Get the unique body parts from the exercise database
     body_parts = set(exercise["body_part"] for exercise in workout_database.workouts)
     
@@ -22,6 +22,14 @@ def generate_workout(workout_days):
     
     # Calculate the number of compound exercises to assign per body part
     even_body_part_count = len(compound_exercises) // len(body_parts)
+
+    # Determine rep range based on the user's goal
+    if goal_type == "muscle gain":
+        reps = 12  # High reps for muscle gain
+        sets = 3
+    else:
+        reps = 6  # Low reps for strength gain
+        sets = 5
 
     # Loop through each workout day
     for day in range(1, workout_days + 1):
@@ -55,5 +63,5 @@ def generate_workout(workout_days):
         # Print the workout plan for the current day
         print(f"Day {day}:")
         for exercise in workout_plan:
-            print(f"  {exercise['name']} ({exercise['body_part']})")
+            print(f"  {exercise['name']} ({exercise['body_part']}) - {reps} reps, {sets} sets")
         print()

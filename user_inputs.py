@@ -1,3 +1,12 @@
+# Function to get the user's goal type
+def get_goal_type():
+    while True:
+        goal_type = input("Choose your goal type (muscle gain/strength gain): ").lower()
+        if goal_type in ["muscle gain", "strength gain"]:
+            return goal_type
+        else:
+            print("Please choose 'muscle gain' or 'strength gain'.")
+
 # Function to get a valid number of workout days from the user
 def get_valid_workout_days():
     while True:
