@@ -1,4 +1,4 @@
-import random
+import numpy as np
 
 class SetsRepsGenerator:
     def __init__(self, goal_type):
@@ -11,4 +11,6 @@ class SetsRepsGenerator:
 
     def get_sets_reps(self, exercise_type):
         info = self.compound if exercise_type == "compound" else self.accessory
-        return info["sets"], random.randint(info["reps_range"][0], info["reps_range"][1])
+        reps = np.random.randint(info["reps_range"][0], info["reps_range"][1] + 1)
+        # sets = np.random.choice([info["sets"], info["sets"]-1, info["sets"]+1])
+        return info["sets"], reps
