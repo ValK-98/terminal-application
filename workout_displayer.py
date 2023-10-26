@@ -1,7 +1,7 @@
 import workout_database
 
-
 class WorkoutDisplayer:
+
     def display_workout_schedule(self, workout_schedule):
         for daily_plan in workout_schedule:
             self.display_workout_plan(daily_plan["Day"], daily_plan)
@@ -13,19 +13,24 @@ class WorkoutDisplayer:
         print()
 
     def modify_workout_plan(self, workout_schedule):
+        options = {
+            "1": self.remove_workout,
+            "2": self.swap_workout,
+            "3": "exit"
+        }
+        
         while True:
-            self.display_workout_schedule(workout_schedule)
-            print("Options:")
-            print("1. Remove a workout")
-            print("2. Swap a workout")
-            print("3. Finish editing")
-            option = input("Select an option (1/2/3): ")
-            if option == "1":
-                self.remove_workout(workout_schedule)
-            elif option == "2":
-                self.swap_workout(workout_schedule)
-            elif option == "3":
-                break
-            else:
-                print("Invalid option. Try again.")
-
+            try:
+                self.display_workout_schedule(workout_schedule)
+                print("Options:")
+                for key, value in options.items():
+                    print(f"{key}. {value.__name__.replace('_', ' ').capitalize() if callable(value) else value.capitalize()}")
+                option = input("Select an option: ")
+                if option in options:
+                    if option == "3":
+                        break
+                    options[option](workout_schedule)
+                else:
+                    print("Invalid option. Try again.")
+            except Exception as e:
+                print(f"An error occurred: {e}. Please try again.")
