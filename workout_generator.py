@@ -14,14 +14,19 @@ class WorkoutGenerator:
         return exercise_list.pop() if exercise_list else None
 
     def generate_workout(self, workout_days, goal_type):
+        workout_schedule = [] 
         used_compound_exercises = set()
         body_part_counts = {part: 0 for part in self.body_parts}
         self.sets_reps_generator = SetsRepsGenerator(goal_type)
 
         for day in range(1, workout_days + 1):
-            self.print_workout_plan(day, workout_days, used_compound_exercises, body_part_counts)
+            daily_plan = self.get_workout_plan_for_day(day, workout_days, used_compound_exercises, body_part_counts)
+            workout_schedule.append(daily_plan)  
+            self.display_workout_plan(day, daily_plan)
+        
+        return workout_schedule 
 
-    def print_workout_plan(self, day, workout_days, used_compound_exercises, body_part_counts):
+    def get_workout_plan_for_day(self, day, workout_days, used_compound_exercises, body_part_counts):
         workout_plan = []
         compound_exercises_copy = self.compound_exercises.copy()
         accessory_exercises_copy = self.accessory_exercises.copy()
@@ -48,10 +53,21 @@ class WorkoutGenerator:
                     workout_plan.append(accessory_exercise)
                     body_part_counts[accessory_exercise.body_part] += 1
 
+        return {
+            "Day": day,
+            "Exercises": [{
+                "Name": exercise.name,
+                "Body Part": exercise.body_part,
+                "Reps": reps,
+                "Sets": sets
+            } for exercise, (sets, reps) in zip(workout_plan, [self.sets_reps_generator.get_sets_reps(e.type) for e in workout_plan])]
+        }
+
+
+    def display_workout_plan(self, day, daily_plan):
         print(f"Day {day}:")
-        for exercise in workout_plan:
-            sets, reps = self.sets_reps_generator.get_sets_reps(exercise.type)
-            print(f"  {exercise.name} ({exercise.body_part}) - {reps} reps, {sets} sets")
+        for exercise in daily_plan["Exercises"]:
+            print(f"  {exercise['Name']} ({exercise['Body Part']}) - {exercise['Reps']} reps, {exercise['Sets']} sets")
         print()
 
 

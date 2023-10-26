@@ -10,3 +10,6 @@ workout_days = user_inputs.get_valid_workout_days()
 # Create an instance of WorkoutGenerator and display the workout plan
 generator = WorkoutGenerator()
 generator.generate_workout(workout_days, goal_type)
+
+# workout_schedule = generator.generate_workout(workout_days, goal_type)
+# print(workout_schedule)
