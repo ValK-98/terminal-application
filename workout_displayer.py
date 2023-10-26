@@ -1,6 +1,7 @@
 import workout_database
 from sets_reps_generator import SetsRepsGenerator
 import functools
+from workout_exporter import export_workout_to_file
 
 class WorkoutDisplayer:
 
@@ -38,7 +39,8 @@ class WorkoutDisplayer:
             "1": self.remove_workout,
             "2": self.swap_workout,
             "3": self.add_exercise,
-            "4": "exit"
+            "4": self.export_workout, 
+            "5": "exit"
         }
         
         while True:
@@ -46,7 +48,7 @@ class WorkoutDisplayer:
             self._display_options(options)
             option = input("Select an option: ")
             if option in options:
-                if option == "4":
+                if option == "5":
                     break
                 options[option](workout_schedule)
             else:
@@ -124,4 +126,12 @@ class WorkoutDisplayer:
         })
             
         print(f"Added {new_exercise.name} for Day {day}.")
+
+    @_handle_exception
+    def export_workout(self, workout_schedule):
+        filename = input("Enter the filename (or press enter for 'workout_plan.txt'): ")
+        if not filename:
+            filename = "workout_plan.txt"
+        export_workout_to_file(workout_schedule, filename)
+        print(f"Workout plan exported to {filename}!")
 
