@@ -10,7 +10,9 @@ class SetsRepsGenerator:
             self.accessory = {"sets": 3, "reps_range": (5, 10)}
 
     def get_sets_reps(self, exercise_type):
-        info = self.compound if exercise_type == "compound" else self.accessory
-        reps = np.random.randint(info["reps_range"][0], info["reps_range"][1] + 1)
-        # sets = np.random.choice([info["sets"], info["sets"]-1, info["sets"]+1])
-        return info["sets"], reps
+        try:
+            info = self.compound if exercise_type == "compound" else self.accessory
+            reps = np.random.randint(info["reps_range"][0], info["reps_range"][1] + 1)
+            return info["sets"], reps
+        except Exception as e:
+            raise ValueError(f"An error occurred while generating sets and reps: {e}")
