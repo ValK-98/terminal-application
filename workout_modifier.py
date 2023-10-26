@@ -1,17 +1,9 @@
 import workout_database
+from workout_viewer import WorkoutViewer
 from sets_reps_generator import SetsRepsGenerator
 
-class WorkoutDisplayer:
 
-    def display_workout_schedule(self, workout_schedule):
-        for daily_plan in workout_schedule:
-            self.display_workout_plan(daily_plan["Day"], daily_plan)
-
-    def display_workout_plan(self, day, daily_plan):
-        print(f"Day {day}:")
-        for exercise in daily_plan["Exercises"]:
-            print(f"  {exercise['Name']} ({exercise['Body Part']}) - {exercise['Reps']} reps, {exercise['Sets']} sets")
-        print()
+class WorkoutModifier:
 
     def modify_workout_plan(self, workout_schedule):
         options = {
@@ -135,4 +127,3 @@ class WorkoutDisplayer:
             print(f"Added {new_exercise.name} for Day {day}.")
         except Exception as e:
             print(f"An error occurred: {e}")
-
