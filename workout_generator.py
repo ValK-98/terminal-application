@@ -9,10 +9,12 @@ class WorkoutGenerator:
         self.accessory_exercises = [exercise for exercise in workout_database.workouts if exercise.type == "accessory"]
 
     def get_and_remove_random_exercise(self, exercise_list, excluded_names=set()):
-        exercise_list = [e for e in exercise_list if e.name not in excluded_names]
-        exercise_list_copy = exercise_list.copy()
-        random.shuffle(exercise_list_copy)
-        return exercise_list_copy.pop() if exercise_list_copy else None
+        exercise_list[:] = [e for e in exercise_list if e.name not in excluded_names]
+        if not exercise_list:
+            return None
+        selected_exercise = random.choice(exercise_list)
+        exercise_list.remove(selected_exercise)
+        return selected_exercise
 
     def generate_workout(self, workout_days, goal_type):
         workout_schedule = [] 
