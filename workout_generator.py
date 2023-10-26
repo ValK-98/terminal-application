@@ -55,6 +55,10 @@ class WorkoutGenerator:
                     workout_plan.append(accessory_exercise)
                     body_part_counts[accessory_exercise.body_part] += 1
 
+        if not workout_plan:
+            raise ValueError(f"Unable to generate workout for day {day}")
+
+
         return {
             "Day": day,
             "Exercises": [{
