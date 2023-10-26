@@ -1,4 +1,5 @@
 import workout_database
+from sets_reps_generator import SetsRepsGenerator
 
 class WorkoutDisplayer:
 
@@ -16,7 +17,8 @@ class WorkoutDisplayer:
         options = {
             "1": self.remove_workout,
             "2": self.swap_workout,
-            "3": "exit"
+            "3": self.add_exercise,
+            "4": "exit"
         }
         
         while True:
@@ -27,7 +29,7 @@ class WorkoutDisplayer:
                     print(f"{key}. {value.__name__.replace('_', ' ').capitalize() if callable(value) else value.capitalize()}")
                 option = input("Select an option: ")
                 if option in options:
-                    if option == "3":
+                    if option == "4":
                         break
                     options[option](workout_schedule)
                 else:
@@ -101,6 +103,36 @@ class WorkoutDisplayer:
                 workout_schedule[day-1]['Exercises'][to_swap]['Body Part'] = new_exercise.body_part
         except StopIteration:
             print("No available exercises to swap with. Try another body part.")
+        except Exception as e:
+            print(f"An error occurred: {e}")
+
+
+    def add_exercise(self, workout_schedule):
+        day = self._get_valid_day(workout_schedule)
+        if day is None:
+            return
+        
+        body_part = input("Enter the body part for the exercise: ")
+        exercise_type = input("Enter the exercise type (compound/accessory): ").lower()
+        
+        try:
+            available_exercises = [e for e in workout_database.workouts if e.body_part == body_part and e.type == exercise_type and e.name not in [ex['Name'] for ex in workout_schedule[day-1]['Exercises']]]
+            if not available_exercises:
+                print(f"No available exercises for {body_part} as {exercise_type}.")
+                return
+
+            new_exercise = available_exercises[0]
+            sets_reps_generator = SetsRepsGenerator(workout_schedule[day-1]["Exercises"][0]["Sets"])
+            sets, reps = sets_reps_generator.get_sets_reps(exercise_type)
+
+            workout_schedule[day-1]['Exercises'].append({
+                "Name": new_exercise.name,
+                "Body Part": new_exercise.body_part,
+                "Reps": reps,
+                "Sets": sets
+            })
+            
+            print(f"Added {new_exercise.name} for Day {day}.")
         except Exception as e:
             print(f"An error occurred: {e}")
 
