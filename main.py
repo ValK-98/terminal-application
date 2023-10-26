@@ -1,6 +1,5 @@
 from workout_generator import WorkoutGenerator
-from workout_viewer import WorkoutViewer
-from workout_modifier import WorkoutModifier
+from workout_displayer import WorkoutDisplayer
 import user_inputs
 
 
@@ -16,9 +15,8 @@ try:
     workout_schedule = generator.generate_workout(workout_days, goal_type)
 
     # Display and give option to modify the workout plan
-    viewer = WorkoutViewer()
-    modifier = WorkoutModifier(viewer)
-    modifier.modify_workout_plan(workout_schedule)
+    displayer = WorkoutDisplayer()
+    displayer.modify_workout_plan(workout_schedule)
 
 
     # print(workout_schedule)
