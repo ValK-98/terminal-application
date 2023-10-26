@@ -8,10 +8,11 @@ class WorkoutGenerator:
         self.compound_exercises = [exercise for exercise in workout_database.workouts if exercise.type == "compound"]
         self.accessory_exercises = [exercise for exercise in workout_database.workouts if exercise.type == "accessory"]
 
-    def get_random_exercise(self, exercise_list, excluded_names=set()):
+    def get_and_remove_random_exercise(self, exercise_list, excluded_names=set()):
         exercise_list = [e for e in exercise_list if e.name not in excluded_names]
-        random.shuffle(exercise_list)
-        return exercise_list.pop() if exercise_list else None
+        exercise_list_copy = exercise_list.copy()
+        random.shuffle(exercise_list_copy)
+        return exercise_list_copy.pop() if exercise_list_copy else None
 
     def generate_workout(self, workout_days, goal_type):
         workout_schedule = [] 
@@ -32,12 +33,12 @@ class WorkoutGenerator:
 
         if workout_days == 1:
             while len(workout_plan) < 4:
-                compound_exercise = self.get_random_exercise(compound_exercises_copy, used_compound_exercises)
+                compound_exercise = self.get_and_remove_random_exercise(compound_exercises_copy, used_compound_exercises)
                 if compound_exercise:
                     workout_plan.append(compound_exercise)
                     used_compound_exercises.add(compound_exercise.name)
         else:
-            compound_exercise = self.get_random_exercise(compound_exercises_copy, used_compound_exercises)
+            compound_exercise = self.get_and_remove_random_exercise(compound_exercises_copy, used_compound_exercises)
             if compound_exercise:
                 workout_plan.append(compound_exercise)
                 used_compound_exercises.add(compound_exercise.name)
@@ -46,7 +47,7 @@ class WorkoutGenerator:
             while len(workout_plan) < 4:
                 underworked_body_parts = [part for part, count in body_part_counts.items() if count == min(body_part_counts.values())]
                 possible_exercises = [ex for ex in accessory_exercises_copy if ex.body_part in underworked_body_parts]
-                accessory_exercise = self.get_random_exercise(possible_exercises)
+                accessory_exercise = self.get_and_remove_random_exercise(possible_exercises)
                 
                 if accessory_exercise:
                     workout_plan.append(accessory_exercise)
