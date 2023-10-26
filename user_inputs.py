@@ -1,17 +1,22 @@
-# Function to get the user's goal type
 def get_goal_type():
     while True:
-        goal_type = input("Choose your goal type (muscle gain/strength gain): ").lower()
+        goal_type = input("Choose your goal type (muscle gain/strength gain) or type 'exit' to quit: ").lower()
         if goal_type in ["muscle gain", "strength gain"]:
             return goal_type
+        elif goal_type == "exit":
+            print("Exiting the program. Goodbye!")
+            exit(0)
         else:
             print("Please choose 'muscle gain' or 'strength gain'.")
 
-# Function to get a valid number of workout days from the user
 def get_valid_workout_days():
     while True:
+        response = input("Enter the number of workout days (1-5) or type 'exit' to quit: ")
+        if response == "exit":
+            print("Exiting the program. Goodbye!")
+            exit(0)
         try:
-            workout_days = int(input("Enter the number of workout days (1-5): "))
+            workout_days = int(response)
             if 1 <= workout_days <= 5:
                 return workout_days
             else:
