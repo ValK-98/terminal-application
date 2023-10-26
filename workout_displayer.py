@@ -135,3 +135,4 @@ class WorkoutDisplayer:
             print(f"Added {new_exercise.name} for Day {day}.")
         except Exception as e:
             print(f"An error occurred: {e}")
+
