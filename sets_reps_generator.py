@@ -1,11 +1,12 @@
 import numpy as np
 
+
 class SetsRepsGenerator:
     def __init__(self, goal_type):
         if goal_type == "muscle gain":
             self.compound = {"sets": 4, "reps_range": (10, 12)}
             self.accessory = {"sets": 3, "reps_range": (10, 15)}
-        else: 
+        else:
             self.compound = {"sets": 5, "reps_range": (4, 6)}
             self.accessory = {"sets": 3, "reps_range": (5, 10)}
 
