@@ -105,16 +105,6 @@ class WorkoutDisplayer:
             del workout_schedule[day - 1]["Exercises"][to_remove]
 
     @_handle_exception
-    def _find_exercise(self, body_part, exercise_type, excluded_names):
-        return next(
-            e
-            for e in workout_database.workouts
-            if e.body_part == body_part
-            and e.type == exercise_type
-            and e.name not in excluded_names
-        )
-
-    @_handle_exception
     def swap_workout(self, workout_schedule):
         day, to_swap = self._get_valid_day_and_exercise(workout_schedule, "swap")
         if day and to_swap is not None:
@@ -125,10 +115,12 @@ class WorkoutDisplayer:
                 swap_with_body_part = workout_schedule[day - 1]["Exercises"][to_swap][
                     "Body Part"
                 ]
-            new_exercise = self._find_exercise(
-                swap_with_body_part,
-                "",
-                [ex["Name"] for ex in workout_schedule[day - 1]["Exercises"]],
+            new_exercise = next(
+                e
+                for e in workout_database.workouts
+                if e.body_part == swap_with_body_part
+                and e.name
+                not in [ex["Name"] for ex in workout_schedule[day - 1]["Exercises"]]
             )
             workout_schedule[day - 1]["Exercises"][to_swap]["Name"] = new_exercise.name
             workout_schedule[day - 1]["Exercises"][to_swap][
