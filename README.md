@@ -1,4 +1,4 @@
-# Term 1 Assignment 3 Workout Generator
+# T1A3 Workout Generator
 ## Valentinas Kornijenka
 
 ### [Link to Git Repository](https://github.com/ValK-98/terminal-application)
@@ -7,7 +7,7 @@
 
 ## Styling guide
 
-For this project I used the PEP8 Style Guide  [styling guide link here](https://peps.python.org/pep-0008/)
+For this project I used the PEP8 Style Guide - [ which you can find here](https://peps.python.org/pep-0008/).
 
 ## Features of app
 
